@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>兔兔情緒小天地</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .bunny-site {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: linear-gradient(135deg, #FFF5F8 0%, #FFF9F0 50%, #F0F8FF 100%);
+      min-height: 100vh;
+      padding: 0 0 3rem;
+    }
+
+    .site-header {
+      text-align: center;
+      padding: 2.5rem 1rem 1.5rem;
+    }
+
+    .site-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #C06080;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    } 
+
+    .site-subtitle {
+      font-size: 1rem;
+      color: #A08090;
+      letter-spacing: 0.05em;
+    }
+
+    .deco-line {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #F4A0C0, #FFD580, #A0D4F4);
+      border-radius: 2px;
+      margin: 0.8rem auto 0;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .bunny-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .bunny-card:hover { transform: translateY(-6px); }
+
+    .card-calm  { border: 2.5px solid #B8E0D8; box-shadow: 0 4px 24px rgba(100,200,180,0.15); }
+    .card-happy { border: 2.5px solid #FFD6A0; box-shadow: 0 4px 24px rgba(255,180,80,0.15); }
+    .card-dance { border: 2.5px solid #F4B8D8; box-shadow: 0 4px 24px rgba(240,120,160,0.15); }
+    .card-relax { border: 2.5px solid #C4D4F8; box-shadow: 0 4px 24px rgba(120,140,240,0.15); }
+
+    .card-calm  .card-bg { background: radial-gradient(circle at 80% 20%, #E8F8F4 0%, transparent 60%); }
+    .card-happy .card-bg { background: radial-gradient(circle at 80% 20%, #FFF5E0 0%, transparent 60%); }
+    .card-dance .card-bg { background: radial-gradient(circle at 80% 20%, #FFF0F5 0%, transparent 60%); }
+    .card-relax .card-bg { background: radial-gradient(circle at 80% 20%, #F0F4FF 0%, transparent 60%); }
+
+    .card-bg {
+      position: absolute; inset: 0; border-radius: 24px; pointer-events: none;
+    }
+
+    .emoji-wrap {
+      font-size: 5rem;
+      line-height: 1;
+      margin-bottom: 1rem;
+      display: block;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+
+    .card-calm  .emoji-wrap { animation-name: breathe; }
+    .card-happy .emoji-wrap { animation-name: wobble; }
+    .card-dance .emoji-wrap { animation-name: dance; }
+    .card-relax .emoji-wrap { animation-name: float; }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.05); }
+    }
+    @keyframes dance {
+      0%   { transform: translateX(0) rotate(0deg); }
+      25%  { transform: translateX(-8px) rotate(-10deg); }
+      50%  { transform: translateX(0) rotate(0deg) scale(1.1); }
+      75%  { transform: translateX(8px) rotate(10deg); }
+      100% { transform: translateX(0) rotate(0deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    .card-label-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 3px 12px;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-calm  .card-label-tag { background: #D0F0E8; color: #3A9A80; }
+    .card-happy .card-label-tag { background: #FFE8C0; color: #A06010; }
+    .card-dance .card-label-tag { background: #FFD6E8; color: #B04070; }
+    .card-relax .card-label-tag { background: #D8E4FF; color: #4050B0; }
+
+    .card-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #3A3040;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: #8A7890;
+      line-height: 1.7;
+    }
+
+    .sparkles {
+      position: absolute;
+      pointer-events: none;
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+
+    .sp1 { top: 12px; left: 16px; animation: twinkle 2s infinite; }
+    .sp2 { top: 20px; right: 20px; animation: twinkle 2.5s infinite 0.5s; }
+    .sp3 { bottom: 20px; left: 20px; animation: twinkle 3s infinite 1s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.3); }
+    }
+
+    .site-footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.85rem;
+      color: #C0A0B0;
+      letter-spacing: 0.05em;
+    }
+
+    .floating-bunnies {
+      text-align: center;
+      font-size: 1.5rem;
+      letter-spacing: 0.3em;
+      margin-bottom: 0.5rem;
+      animation: drift 4s ease-in-out infinite;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(10px); }
+    }
+  </style>
+</head>
+<body>
+<div class="bunny-site">
+
+  <header class="site-header">
+    <div style="font-size:2.5rem; margin-bottom:0.5rem">🐰🌸🐇</div>
+    <h1 class="site-title">兔兔情緒小天地</h1>
+    <p class="site-subtitle">與毛茸茸的兔兔一起感受生活的美好</p>
+    <div class="deco-line"></div>
+  </header>
+
+  <div class="cards-grid">
+
+    <!-- 平靜深呼吸 -->
+    <div class="bunny-card card-calm">
+      <div class="card-bg"></div>
+      <span class="sparkles sp1">✦</span>
+      <span class="sparkles sp2">✧</span>
+      <span class="sparkles sp3">✦</span>
+      <span class="emoji-wrap">🐇</span>
+      <span class="card-label-tag">CALM</span>
+      <h2 class="card-title">平靜深呼吸</h2>
+      <p class="card-desc">
+        輕輕閉上眼睛，<br>
+        隨兔兔一起吸氣⋯呼氣⋯<br>
+        讓心慢慢沉靜下來 🌿
+      </p>
+    </div>
+
+    <!-- 看快樂的書 -->
+    <div class="bunny-card card-happy">
+      <div class="card-bg"></div>
+      <span class="sparkles sp1">⭐</span>
+      <span class="sparkles sp2">✨</span>
+      <span class="sparkles sp3">⭐</span>
+      <span class="emoji-wrap">📖🐰</span>
+      <span class="card-label-tag">HAPPY</span>
+      <h2 class="card-title">看快樂的書</h2>
+      <p class="card-desc">
+        窩在軟綿綿的角落，<br>
+        翻開一本喜歡的書，<br>
+        讓故事帶你去冒險 📚
+      </p>
+    </div>
+
+    <!-- 跳開心的舞 -->
+    <div class="bunny-card card-dance">
+      <div class="card-bg"></div>
+      <span class="sparkles sp1">🌸</span>
+      <span class="sparkles sp2">💫</span>
+      <span class="sparkles sp3">🌸</span>
+      <span class="emoji-wrap">🐇✨</span>
+      <span class="card-label-tag">JOY</span>
+      <h2 class="card-title">跳開心的舞</h2>
+      <p class="card-desc">
+        甩動長長的耳朵，<br>
+        踩著輕快的節奏跳起來，<br>
+        快樂就是這麼簡單 🎵
+      </p>
+    </div>
+
+    <!-- 放鬆地趴著 -->
+    <div class="bunny-card card-relax">
+      <div class="card-bg"></div>
+      <span class="sparkles sp1">🌙</span>
+      <span class="sparkles sp2">⋆</span>
+      <span class="sparkles sp3">🌙</span>
+      <span class="emoji-wrap">🐰💤</span>
+      <span class="card-label-tag">RELAX</span>
+      <h2 class="card-title">放鬆地趴著</h2>
+      <p class="card-desc">
+        軟軟地趴在溫暖的地方，<br>
+        什麼都不想，<br>
+        只是靜靜享受此刻 ☁️
+      </p>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="floating-bunnies">🐇 🐰 🐇 🐰 🐇</div>
+    <p>願每一天都有兔兔陪伴 · 溫柔而美好 ♡</p>
+  </footer>
+
+</div>
+</body>
+</html>
